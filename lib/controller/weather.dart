@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
-import 'package:weather_with_mobx/model/weather_model.dart';
+import 'package:weather_with_mobx/model/wmodel.dart';
 part 'weather.g.dart';
 
 class WeatherApp = Weather with _$WeatherApp;
@@ -20,7 +20,7 @@ abstract class Weather with Store {
     fetchWeatherData();
   }
 
-  Future<WeatherData> fetchWeatherData() async {
+  Future<WeatherData?> fetchWeatherData() async {
     loading = true;
     Response response;
     var dio = Dio();
@@ -34,7 +34,7 @@ abstract class Weather with Store {
       WeatherData weatherResult = WeatherData.fromJson(response.data);
       return weatherResult;
     } else {
-      return WeatherData();
+      return null;
     }
   }
 }

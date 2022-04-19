@@ -7,7 +7,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_with_mobx/controller/weather.dart';
-import 'package:weather_with_mobx/model/weather_model.dart';
+// import 'package:weather_with_mobx/model/weather_model.dart';
+import 'package:weather_with_mobx/model/wmodel.dart';
 import 'package:weather_with_mobx/view/features/homescreen/presentation/widgets/air_humidity.dart';
 import 'package:weather_with_mobx/view/features/homescreen/presentation/widgets/search_city_temp.dart';
 
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ]),
               ),
               child: Observer(builder: (context) {
-                return FutureBuilder<WeatherData>(
+                return FutureBuilder<WeatherData?>(
                     future: state.fetchWeatherData(),
                     builder: ((context, snapshot) {
                       // if (snapshot.connectionState == ConnectionState.waiting) {
@@ -63,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (snapshot.hasData) {
                         final double temperatue =
                             snapshot.data!.main!.temp! - 273.15;
-                        final icon = snapshot.data!.weather!.first.icon;
+                        final icon =
+                            snapshot.data!.weather.first.icon.toString();
                         return state.loading
                             ? const Center(
                                 child: CircularProgressIndicator(
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Column(
                                             children: [
                                               Text(
-                                                snapshot.data!.weather!.first
+                                                snapshot.data!.weather.first
                                                     .description
                                                     .toString(),
                                                 style: const TextStyle(
@@ -104,7 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     fontSize: 20),
                                               ),
                                               Text(
-                                                " ${snapshot.data!.name}, ${snapshot.data!.sys!.country}",
+                                                // snapshot.data!.sys!.country
+                                                //     .toString()
+                                                //     .toString(),
+
+                                                "${snapshot.data!.name}, ${snapshot.data!.sys!.country}",
+
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -162,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       AirHumidity(
                                         image: "assets/wind.png",
                                         detail:
-                                            snapshot.data!.wind!.speed!.toInt(),
+                                            snapshot.data!.wind!.speed.toInt(),
                                         des: "Km/hr",
                                       ),
                                       AirHumidity(
